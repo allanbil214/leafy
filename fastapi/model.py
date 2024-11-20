@@ -9,8 +9,9 @@ from PIL import Image
 import time
 
 class plant_disease_model:
-    def __init__(self, model_path):
+    def __init__(self, model_path, confidence_threshold=0.5):
         self.loaded_model = tf.saved_model.load(model_path)
+        self.confidence_threshold = confidence_threshold
 
 
     def predict_tf(self, base64_str, save_dir='saved_images'):
@@ -26,42 +27,59 @@ class plant_disease_model:
             'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 
             'Tomato___healthy'
         ]
-
+        
         # Decode the base64 string to get image data
         img_data = base64.b64decode(base64_str)
         img = Image.open(BytesIO(img_data))
-
-        # Preprocess the image
-        img_resize = img.resize((224, 224))  # Resize the image to match model input size
-        img_array = np.array(img_resize)  # Convert image to numpy array
-        img_array = img_array.astype(np.float32) / 255.0  # Normalize pixel values and convert to float32
-
-        # Predict the class of the image using the loaded_model directly
-        prediction = self.loaded_model(np.expand_dims(img_array, axis=0))
-
-        # Get the predicted class index
-        predicted_class_index = np.argmax(prediction)
         
-        # Get the predicted class name
-        predicted_class_name = class_names[predicted_class_index]
-
-        ###### SIMPAN DECODED BASE64 IMAGE
-        # Ensure the save directory exists
+        # Preprocess the image
+        img_resize = img.resize((224, 224))
+        img_array = np.array(img_resize)
+        img_array = img_array.astype(np.float32) / 255.0
+        
+        # Predict the class of the image
+        prediction = self.loaded_model(np.expand_dims(img_array, axis=0))
+        
+        # Convert prediction to numpy array if it's a tensor
+        if isinstance(prediction, tf.Tensor):
+            prediction = prediction.numpy()
+        
+        # Get confidence scores
+        confidence_scores = prediction[0]
+        max_confidence = np.max(confidence_scores)
+        predicted_class_index = np.argmax(confidence_scores)
+        
+        # Check if confidence is below threshold
+        if max_confidence < self.confidence_threshold:
+            predicted_class_name = "Unknown Disease"
+            image_name = f"Unknown_{int(time.time())}.jpg"
+        else:
+            predicted_class_name = class_names[predicted_class_index]
+            image_name = f"{predicted_class_name}_{int(time.time())}.jpg"
+        
+        # Save the image
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
-
-        # Generate a unique filename using the predicted class name and a timestamp
-        timestamp = int(time.time())
-        image_name = f"{predicted_class_name}_{timestamp}.jpg"
         save_path = os.path.join(save_dir, image_name)
-
-        # Save the image to the specified directory
         img.save(save_path)
+        
+        # Return both class name and confidence
+        return {
+            "class_name": predicted_class_name,
+            "confidence": float(max_confidence)
+        }
 
-        return predicted_class_name
+    def prompt_unknown(disease):
+        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
+        model = genai.GenerativeModel('gemini-pro')
+        
+        prompt = f"buat kalimat bahwa foto itu bukan daun tanaman."
+        
+        response = model.generate_content(prompt)
+        return response.text
 
     def prompt_disease(disease):
-        genai.configure(api_key="YOUR_GEMINI_API")
+        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
         model = genai.GenerativeModel('gemini-pro')
         
         prompt = f"""
@@ -94,7 +112,7 @@ class plant_disease_model:
 
 
     def prompt_healthy(plant_type):
-        genai.configure(api_key="YOUR_GEMINI_API")
+        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
         model = genai.GenerativeModel('gemini-pro')
         prompt = f"""Tanaman {plant_type} Anda sehat! Berikan saran perawatan rutin agar tetap sehat dan subur dalam 3 paragraf. 
         Buka dengan menyatakan bahwa jenis_tanamannya sehat. dalam format Markdown ya.

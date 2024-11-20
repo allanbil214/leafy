@@ -7,7 +7,7 @@ from pydantic import BaseModel
 app = FastAPI()
 
 # Initialize the model with the path to the TFLite model file
-model_path = "/model"  # Replace with your model path
+model_path = "D:/Univ/Mata Kuliah/SEMESTER 7/plantvillage/experiment/3_noinception-morelayers/github_plantvillage_noinceptionv3_morelayers"  # Replace with your model path
 model = plant_disease_model(model_path=model_path)
 
 class ImageData(BaseModel):
@@ -22,17 +22,18 @@ async def predict_plant_disease(image_data: ImageData):
     try:
         # Make a prediction using the base64 encoded image data
         base64_encoded = image_data.base64_encoded
-        predicted_class = model.predict_tf(base64_encoded)
-        plant, disease, url = model.split_class_name(predicted_class)
-
-        print(plant, disease)
+        prediction_result = model.predict_tf(base64_encoded)
+        plant, disease, url = model.split_class_name(prediction_result["class_name"])
         
+        print(prediction_result)
+
         # Return results
         return JSONResponse(content={
-            "predicted_class": predicted_class,
+            "predicted_class": prediction_result["class_name"],
             "plant_name": plant,
             "plant_disease": disease,
-            "plant_url": url
+            "plant_url": url,
+            "confidence": prediction_result["confidence"]
         })
 
     except Exception as e:
@@ -44,6 +45,8 @@ def get_disease_info(disease: str):
         # Determine the response based on the predicted class
         if "healthy" in disease:
             info = plant_disease_model.prompt_healthy(disease)
+        elif "unknown" in disease:
+            info = plant_disease_model.prompt_healthy()
         else:
             info = plant_disease_model.prompt_disease(disease)
         return JSONResponse(content={"disease_info": info})
