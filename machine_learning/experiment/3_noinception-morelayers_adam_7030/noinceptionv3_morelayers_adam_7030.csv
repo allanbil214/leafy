@@ -1,0 +1,64 @@
+filename,prediction
+potato healthy (1).JPG,"{'Pepper,_bell___Bacterial_spot': 0.8201252}"
+peach healthy (2).JPG,{'Apple___healthy': 0.76728773}
+tomato late blight (2).JPG,"{'Pepper,_bell___Bacterial_spot': 0.8929265}"
+potato early blight (3).JPG,{'Apple___Black_rot': 0.6230664}
+tomato bacterial spot (1).JPG,{'Tomato___Late_blight': 0.88189924}
+stroberi scorch (3).JPG,{'Tomato___Septoria_leaf_spot': 0.88605464}
+tomato healthy (1).JPG,{'Tomato___Septoria_leaf_spot': 0.73794854}
+potato early blight (2).JPG,{'Tomato___Septoria_leaf_spot': 0.9025715}
+apple healthy (2).JPG,{'Tomato___Late_blight': 0.69943464}
+tomato curl (2).JPG,{'Tomato___Early_blight': 0.9178017}
+apple blacrot (3).JPG,{'Cherry_(including_sour)___healthy': 0.9524683}
+stroberi scorch (2).JPG,{'Tomato___Septoria_leaf_spot': 0.9972989}
+tomato septoria (1).JPG,{'Tomato___Septoria_leaf_spot': 0.8875163}
+pepper blackspot (3).JPG,{'Tomato___Septoria_leaf_spot': 0.9935429}
+apple scab (3).JPG,{'Apple___Apple_scab': 0.8788854}
+cherry mildew (1).JPG,{'Tomato___Early_blight': 0.5526711}
+potato late blight (2).JPG,{'Potato___Late_blight': 0.93015164}
+potato healthy (2).JPG,{'Apple___Black_rot': 0.830557}
+apple scab (1).JPG,{'Potato___Late_blight': 0.6724314}
+pepper healthy (2).JPG,{'Apple___Black_rot': 0.9034487}
+tomato healthy (2).JPG,{'Tomato___Septoria_leaf_spot': 0.86534965}
+tomato late blight (1).JPG,{'Tomato___Early_blight': 0.84178084}
+tomato septoria (2).JPG,{'Tomato___Septoria_leaf_spot': 0.99513584}
+tomato curl (1).JPG,"{'Pepper,_bell___Bacterial_spot': 0.6123466}"
+pepper healthy (3).JPG,"{'Pepper,_bell___healthy': 0.99997866}"
+tomato bacterial spot (3).JPG,{'Tomato___Early_blight': 0.5894795}
+stroberi scorch (1).JPG,{'Tomato___Septoria_leaf_spot': 0.99984145}
+peach bactery (3).JPG,{'Tomato___Late_blight': 0.96964353}
+apple cedar rust (3).JPG,"{'Pepper,_bell___healthy': 0.47109845}"
+apple scab (2).JPG,"{'Pepper,_bell___healthy': 0.34677142}"
+potato late blight (3).JPG,"{'Pepper,_bell___Bacterial_spot': 0.4655023}"
+apple healthy (3).JPG,{'Apple___healthy': 0.44440913}
+pepper healthy (1).JPG,"{'Pepper,_bell___healthy': 0.99999535}"
+cherry healthy (1).JPG,"{'Pepper,_bell___healthy': 0.98850435}"
+pepper blackspot (2).JPG,"{'Pepper,_bell___Bacterial_spot': 0.9999052}"
+tomato early blight (3).JPG,{'Tomato___Septoria_leaf_spot': 0.9991973}
+stroberi healthy (1).JPG,{'Cherry_(including_sour)___healthy': 0.95427233}
+tomato curl (3).JPG,{'Tomato___Late_blight': 0.6464288}
+stroberi healthy (2).JPG,{'Apple___Black_rot': 0.81734884}
+cherry healthy (2).JPG,"{'Pepper,_bell___healthy': 0.4978968}"
+apple cedar rust (1).JPG,{'Cherry_(including_sour)___Powdery_mildew': 0.96619654}
+cherry mildew (3).JPG,"{'Pepper,_bell___healthy': 0.9677125}"
+tomato early blight (1).JPG,{'Tomato___Early_blight': 0.97226614}
+tomato early blight (2).JPG,{'Tomato___Late_blight': 0.73400456}
+potato late blight (1).JPG,{'Potato___Late_blight': 0.98814684}
+apple blacrot (1).JPG,{'Apple___Black_rot': 0.67893416}
+cherry mildew (2).JPG,{'Cherry_(including_sour)___Powdery_mildew': 0.7074284}
+peach healthy (3).JPG,{'Tomato___Late_blight': 0.496519}
+tomato septoria (3).JPG,{'Potato___Early_blight': 0.8717811}
+apple healthy (1).JPG,{'Apple___healthy': 0.27200416}
+peach healthy (1).JPG,{'Peach___healthy': 0.55794865}
+peach bactery (2).JPG,{'Tomato___Late_blight': 0.8788215}
+cherry healthy (3).JPG,{'Cherry_(including_sour)___healthy': 0.80471635}
+potato healthy (3).JPG,{'Apple___Black_rot': 0.9988525}
+peach bactery (1).JPG,{'Tomato___Late_blight': 0.64160687}
+apple blacrot (2).JPG,"{'Pepper,_bell___Bacterial_spot': 0.49098602}"
+apple cedar rust (2).JPG,{'Apple___healthy': 0.9833053}
+pepper blackspot (1).JPG,{'Tomato___Septoria_leaf_spot': 0.96197283}
+stroberi healthy (3).JPG,{'Cherry_(including_sour)___healthy': 0.8408114}
+potato early blight (1).JPG,{'Tomato___Septoria_leaf_spot': 0.9789057}
+tomato healthy (3).JPG,{'Tomato___Early_blight': 0.7275055}
+tomato late blight (3).JPG,{'Tomato___Septoria_leaf_spot': 0.6523576}
+tomato bacterial spot (2).JPG,{'Apple___healthy': 0.26198757}

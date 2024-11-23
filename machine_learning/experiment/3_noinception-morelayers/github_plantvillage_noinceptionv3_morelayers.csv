@@ -1,0 +1,64 @@
+filename,prediction
+tomato early blight (1).JPG,{'Tomato___Early_blight': 0.71538347}
+stroberi scorch (3).JPG,{'Tomato___Early_blight': 0.73728085}
+pepper blackspot (3).JPG,{'Tomato___Early_blight': 0.84201205}
+tomato septoria (1).JPG,{'Tomato___Septoria_leaf_spot': 0.42281982}
+apple scab (2).JPG,"{'Pepper,_bell___healthy': 0.97123486}"
+potato early blight (3).JPG,{'Tomato___Early_blight': 0.5933553}
+potato early blight (2).JPG,{'Tomato___Early_blight': 0.76961344}
+tomato late blight (1).JPG,{'Tomato___Early_blight': 0.98500085}
+stroberi healthy (2).JPG,"{'Pepper,_bell___healthy': 0.9589566}"
+apple healthy (1).JPG,{'Apple___healthy': 0.71382076}
+tomato healthy (2).JPG,{'Tomato___Early_blight': 0.62992424}
+stroberi healthy (1).JPG,"{'Pepper,_bell___healthy': 0.99138427}"
+potato healthy (2).JPG,{'Strawberry___healthy': 0.42218325}
+tomato early blight (2).JPG,{'Tomato___Late_blight': 0.71569926}
+apple scab (1).JPG,"{'Pepper,_bell___healthy': 0.3583521}"
+potato early blight (1).JPG,{'Tomato___Early_blight': 0.68404275}
+pepper blackspot (2).JPG,"{'Pepper,_bell___healthy': 0.9807118}"
+peach bactery (2).JPG,{'Tomato___Early_blight': 0.39605245}
+peach healthy (2).JPG,{'Peach___healthy': 0.6048339}
+potato late blight (2).JPG,{'Potato___Late_blight': 0.7033074}
+tomato septoria (2).JPG,{'Tomato___Septoria_leaf_spot': 0.5556894}
+potato healthy (3).JPG,{'Apple___Black_rot': 0.9846178}
+peach healthy (1).JPG,{'Peach___healthy': 0.6369239}
+stroberi scorch (2).JPG,{'Tomato___Early_blight': 0.96795}
+tomato healthy (1).JPG,{'Tomato___Early_blight': 0.9712252}
+cherry healthy (3).JPG,{'Apple___Black_rot': 0.42957643}
+apple healthy (2).JPG,{'Tomato___Late_blight': 0.9367329}
+tomato curl (1).JPG,{'Tomato___Early_blight': 0.9244829}
+cherry mildew (2).JPG,{'Tomato___Early_blight': 0.5068132}
+pepper healthy (2).JPG,{'Apple___Black_rot': 0.43657634}
+cherry healthy (1).JPG,"{'Pepper,_bell___healthy': 0.9944449}"
+apple healthy (3).JPG,{'Cherry_(including_sour)___healthy': 0.6450791}
+peach healthy (3).JPG,{'Tomato___Late_blight': 0.82368857}
+potato late blight (1).JPG,{'Potato___Late_blight': 0.5854521}
+cherry mildew (1).JPG,{'Tomato___Late_blight': 0.46612212}
+tomato bacterial spot (3).JPG,{'Tomato___Early_blight': 0.99649554}
+tomato late blight (2).JPG,"{'Pepper,_bell___healthy': 0.8574463}"
+apple blacrot (3).JPG,{'Tomato___Early_blight': 0.7494531}
+pepper blackspot (1).JPG,"{'Pepper,_bell___healthy': 0.6066329}"
+apple cedar rust (3).JPG,"{'Pepper,_bell___healthy': 0.8039961}"
+tomato early blight (3).JPG,{'Tomato___Early_blight': 0.80987656}
+stroberi scorch (1).JPG,{'Tomato___Early_blight': 0.92537665}
+apple scab (3).JPG,{'Tomato___Early_blight': 0.96996707}
+apple cedar rust (1).JPG,{'Tomato___Late_blight': 0.263728}
+apple cedar rust (2).JPG,{'Apple___healthy': 0.8118584}
+apple blacrot (2).JPG,{'Tomato___Early_blight': 0.31467992}
+tomato late blight (3).JPG,{'Tomato___Early_blight': 0.98537445}
+cherry mildew (3).JPG,"{'Pepper,_bell___healthy': 0.9634646}"
+tomato bacterial spot (2).JPG,{'Tomato___Late_blight': 0.2696667}
+peach bactery (1).JPG,{'Tomato___Early_blight': 0.74874747}
+apple blacrot (1).JPG,"{'Pepper,_bell___healthy': 0.38325718}"
+tomato bacterial spot (1).JPG,{'Tomato___Late_blight': 0.5227327}
+pepper healthy (1).JPG,"{'Pepper,_bell___healthy': 0.9999994}"
+tomato healthy (3).JPG,{'Tomato___Early_blight': 0.35981208}
+potato late blight (3).JPG,"{'Pepper,_bell___healthy': 0.9766698}"
+peach bactery (3).JPG,{'Tomato___Early_blight': 0.94261414}
+stroberi healthy (3).JPG,"{'Pepper,_bell___healthy': 0.9992799}"
+tomato curl (3).JPG,{'Tomato___Early_blight': 0.93268704}
+cherry healthy (2).JPG,"{'Pepper,_bell___healthy': 0.9230669}"
+tomato curl (2).JPG,{'Tomato___Early_blight': 0.84255135}
+potato healthy (1).JPG,"{'Pepper,_bell___healthy': 0.98951375}"
+tomato septoria (3).JPG,{'Apple___Black_rot': 0.56911665}
+pepper healthy (3).JPG,"{'Pepper,_bell___healthy': 0.9999858}"

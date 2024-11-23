@@ -1,0 +1,2 @@
+try lr and optimizer
+try add more layer

@@ -1,0 +1,64 @@
+filename,prediction
+apple blacrot (3).JPG,{'Cherry_(including_sour)___healthy': 0.76997864}
+apple blacrot (1).JPG,"{'Pepper,_bell___healthy': 0.29955888}"
+stroberi scorch (3).JPG,"{'Pepper,_bell___healthy': 0.9725874}"
+tomato bacterial spot (3).JPG,"{'Pepper,_bell___healthy': 0.5492753}"
+potato late blight (3).JPG,"{'Pepper,_bell___healthy': 0.9834229}"
+potato early blight (2).JPG,"{'Pepper,_bell___healthy': 0.579774}"
+tomato late blight (2).JPG,"{'Pepper,_bell___healthy': 0.9909803}"
+pepper healthy (3).JPG,"{'Pepper,_bell___healthy': 0.93153864}"
+apple scab (3).JPG,{'Cherry_(including_sour)___healthy': 0.94981647}
+pepper blackspot (2).JPG,"{'Pepper,_bell___healthy': 0.99910116}"
+potato late blight (1).JPG,"{'Pepper,_bell___healthy': 0.4544809}"
+tomato early blight (3).JPG,"{'Pepper,_bell___healthy': 0.7806155}"
+apple scab (2).JPG,"{'Pepper,_bell___healthy': 0.2708355}"
+stroberi healthy (1).JPG,"{'Pepper,_bell___healthy': 0.9969944}"
+tomato healthy (3).JPG,"{'Pepper,_bell___healthy': 0.3790661}"
+apple healthy (1).JPG,"{'Pepper,_bell___healthy': 0.8945633}"
+tomato septoria (2).JPG,"{'Pepper,_bell___healthy': 0.64215267}"
+stroberi scorch (2).JPG,{'Cherry_(including_sour)___healthy': 0.7689435}
+stroberi healthy (2).JPG,{'Potato___healthy': 0.40453973}
+tomato curl (1).JPG,{'Apple___healthy': 0.9849355}
+tomato bacterial spot (2).JPG,{'Apple___Apple_scab': 0.27810094}
+stroberi scorch (1).JPG,"{'Pepper,_bell___healthy': 0.9259025}"
+apple blacrot (2).JPG,{'Tomato___Septoria_leaf_spot': 0.84412754}
+peach healthy (3).JPG,{'Tomato___Septoria_leaf_spot': 0.5028987}
+cherry mildew (3).JPG,"{'Pepper,_bell___healthy': 0.7551004}"
+tomato septoria (1).JPG,{'Tomato___Septoria_leaf_spot': 0.9603459}
+tomato septoria (3).JPG,"{'Pepper,_bell___healthy': 0.98413473}"
+cherry healthy (3).JPG,{'Apple___healthy': 0.9867089}
+tomato late blight (1).JPG,{'Tomato___Septoria_leaf_spot': 0.6943515}
+tomato healthy (2).JPG,"{'Pepper,_bell___healthy': 0.5079688}"
+cherry mildew (2).JPG,{'Tomato___Bacterial_spot': 0.36564353}
+tomato bacterial spot (1).JPG,{'Tomato___Bacterial_spot': 0.35076964}
+potato early blight (3).JPG,{'Apple___Black_rot': 0.7577603}
+tomato curl (3).JPG,{'Cherry_(including_sour)___healthy': 0.995891}
+tomato healthy (1).JPG,"{'Pepper,_bell___Bacterial_spot': 0.1960045}"
+tomato late blight (3).JPG,"{'Pepper,_bell___healthy': 0.2826912}"
+apple cedar rust (2).JPG,{'Tomato___Late_blight': 0.59046936}
+stroberi healthy (3).JPG,"{'Pepper,_bell___healthy': 0.999985}"
+potato early blight (1).JPG,"{'Pepper,_bell___healthy': 0.9947242}"
+cherry mildew (1).JPG,{'Apple___healthy': 0.813721}
+peach bactery (3).JPG,{'Peach___healthy': 0.6405265}
+cherry healthy (1).JPG,{'Cherry_(including_sour)___healthy': 0.8424588}
+potato healthy (1).JPG,"{'Pepper,_bell___healthy': 0.94318414}"
+apple healthy (3).JPG,{'Peach___Bacterial_spot': 0.23802285}
+tomato early blight (1).JPG,"{'Pepper,_bell___Bacterial_spot': 0.31224027}"
+pepper blackspot (3).JPG,{'Cherry_(including_sour)___healthy': 0.9983032}
+apple cedar rust (3).JPG,"{'Pepper,_bell___healthy': 0.6929322}"
+pepper blackspot (1).JPG,{'Apple___Black_rot': 0.7030308}
+potato healthy (3).JPG,{'Apple___Black_rot': 0.6671758}
+peach bactery (1).JPG,{'Apple___healthy': 0.7398546}
+peach healthy (1).JPG,{'Tomato___Septoria_leaf_spot': 0.5895934}
+potato late blight (2).JPG,"{'Pepper,_bell___Bacterial_spot': 0.23471151}"
+cherry healthy (2).JPG,{'Cherry_(including_sour)___healthy': 0.78866297}
+apple scab (1).JPG,{'Apple___Apple_scab': 0.42139745}
+tomato early blight (2).JPG,{'Tomato___Septoria_leaf_spot': 0.93336254}
+apple cedar rust (1).JPG,{'Tomato___Late_blight': 0.25280902}
+potato healthy (2).JPG,{'Apple___Black_rot': 0.5460157}
+apple healthy (2).JPG,{'Tomato___Septoria_leaf_spot': 0.3693459}
+peach healthy (2).JPG,{'Tomato___Septoria_leaf_spot': 0.2110528}
+tomato curl (2).JPG,{'Peach___healthy': 0.9956316}
+pepper healthy (1).JPG,"{'Pepper,_bell___healthy': 0.99998605}"
+pepper healthy (2).JPG,{'Apple___Black_rot': 0.8178014}
+peach bactery (2).JPG,{'Peach___healthy': 0.55159193}
