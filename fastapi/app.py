@@ -3,12 +3,20 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from model import plant_disease_model
 from pydantic import BaseModel
+from weather import WeatherService, LocationData
+import os
+
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
 # Initialize the model with the path to the TFLite model file
-model_path = "D:/Univ/Mata Kuliah/SEMESTER 7/plantvillage/experiment/3_noinception-morelayers/github_plantvillage_noinceptionv3_morelayers"  # Replace with your model path
+model_path = "model_final"  # Replace with your model path
 model = plant_disease_model(model_path=model_path)
+weather_service = WeatherService(api_key=os.getenv("OPENWEATHER_API_KEY"))
 
 class ImageData(BaseModel):
     base64_encoded: str
@@ -50,6 +58,30 @@ def get_disease_info(disease: str):
         else:
             info = plant_disease_model.prompt_disease(disease)
         return JSONResponse(content={"disease_info": info})
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/weather/current")
+async def get_current_weather(location: LocationData):
+    """Get current weather for the given location."""
+    try:
+        weather_data = weather_service.get_current_weather(
+            lat=location.latitude,
+            lon=location.longitude
+        )
+        return weather_service.parse_weather_data(weather_data)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/weather/forecast")
+async def get_weather_forecast(location: LocationData):
+    """Get 5-day weather forecast for the given location."""
+    try:
+        forecast_data = weather_service.get_weather_forecast(
+            lat=location.latitude,
+            lon=location.longitude
+        )
+        return JSONResponse(content=forecast_data)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

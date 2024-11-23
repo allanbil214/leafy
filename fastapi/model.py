@@ -1,3 +1,4 @@
+# model.py
 import tensorflow as tf
 from PIL import Image
 import numpy as np
@@ -7,6 +8,11 @@ import os
 from io import BytesIO
 from PIL import Image
 import time
+
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class plant_disease_model:
     def __init__(self, model_path, confidence_threshold=0.5):
@@ -70,7 +76,7 @@ class plant_disease_model:
         }
 
     def prompt_unknown(disease):
-        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
+        genai.configure(api_key="GEMINI_API_KEY")
         model = genai.GenerativeModel('gemini-pro')
         
         prompt = f"buat kalimat bahwa foto itu bukan daun tanaman."
@@ -79,7 +85,7 @@ class plant_disease_model:
         return response.text
 
     def prompt_disease(disease):
-        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
+        genai.configure(api_key="GEMINI_API_KEY")
         model = genai.GenerativeModel('gemini-pro')
         
         prompt = f"""
@@ -110,9 +116,8 @@ class plant_disease_model:
         response = model.generate_content(prompt)
         return response.text
 
-
     def prompt_healthy(plant_type):
-        genai.configure(api_key="AIzaSyAdL316Q_O8FF7apV9VVl97Ue8iB6cHFXw")
+        genai.configure(api_key="GEMINI_API_KEY")
         model = genai.GenerativeModel('gemini-pro')
         prompt = f"""Tanaman {plant_type} Anda sehat! Berikan saran perawatan rutin agar tetap sehat dan subur dalam 3 paragraf. 
         Buka dengan menyatakan bahwa jenis_tanamannya sehat. dalam format Markdown ya.

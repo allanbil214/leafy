@@ -1,0 +1,9 @@
+fastapi
+pydantic
+python-dotenv
+tensorflow == 2.15.1
+pillow
+numpy
+google-generativeai
+dataclasses
+requests

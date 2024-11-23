@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Leafy"
+rootProject.name = "testing2"
 include(":app")
