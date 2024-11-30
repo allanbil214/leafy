@@ -3,38 +3,80 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/plantTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Plant Name"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp" />
-
-    <TextView
-        android:id="@+id/diseaseTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Disease Name"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
-
+    <!-- Image Section -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="centerCrop"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_marginEnd="8dp" />
 
-    <TextView
-        android:id="@+id/outputTextView"
-        android:layout_width="wrap_content"
+    <!-- Text Section -->
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Output Text"
-        android:textSize="14sp" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Plant Name and Date -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/plantTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Plant Name"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date here"
+                android:textSize="12sp"
+                android:textColor="#808080" />
+        </LinearLayout>
+
+        <!-- Disease Name with Delete Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/diseaseTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Disease Name"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/deleteButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_trash"/>
+        </LinearLayout>
+
+        <!-- Disease Info -->
+        <TextView
+            android:id="@+id/diseaseInfoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disease Info..."
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
+            android:textColor="#555555" />
+    </LinearLayout>
 </LinearLayout>

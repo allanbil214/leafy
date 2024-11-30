@@ -15,7 +15,7 @@ load_dotenv()
 app = FastAPI()
 
 # Initialize the model with the path to the TFLite model file
-model_path = "model-fix"  # Replace with your model path
+model_path = ".model-fix"  # Replace with your model path
 model = plant_disease_model(model_path=model_path, api_key=os.getenv("GEMINI_API_KEY"))
 weather_service = WeatherService(api_key=os.getenv("OPENWEATHER_API_KEY"))
 

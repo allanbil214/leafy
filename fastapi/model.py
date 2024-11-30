@@ -83,7 +83,7 @@ class plant_disease_model:
     @lru_cache(maxsize=100)  # Cache responses for identical queries
     def get_disease_info(self, disease: str, info_type: Literal["healthy", "unknown", "disease"]) -> str:
         prompts = {
-            "healthy": """Your {plant_type} plant is healthy! Here's a 3-paragraph guide for routine care to keep it healthy and thriving.
+            "healthy": """Your {plant_type} (change the plant name to be more normal, like remove underscore, etc.) plant is healthy! Here's a 3-paragraph guide for routine care to keep it healthy and thriving.
             Opening with a statement about the plant's health. In Markdown format.
             
             With formatting example as follows:
@@ -103,7 +103,7 @@ class plant_disease_model:
             
             "disease": """
             ###
-            Explain Disease {disease}: Definition, Causes, and Brief Treatment in 3 paragraphs.
+            Explain Disease {disease} (change the plant/disease name to be more normal, like remove underscore, etc.): Definition, Causes, and Brief Treatment in 3 paragraphs.
             Open by mentioning the disease in its standard form and its scientific form. In Markdown format. Use Lists for the Treatment section.
             Example format:
             # Disease {disease}: Definition, Causes, and Treatment

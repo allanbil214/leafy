@@ -21,6 +21,10 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 class ResultActivity : AppCompatActivity() {
 
@@ -111,6 +115,7 @@ class ResultActivity : AppCompatActivity() {
 
         val apiService = retrofit.create(ApiService::class.java)
         val call = apiService.getDiseaseInfo(disease)
+        val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
         call.enqueue(object : Callback<DiseaseInfo> {
             override fun onResponse(call: Call<DiseaseInfo>, response: Response<DiseaseInfo>) {
@@ -125,7 +130,7 @@ class ResultActivity : AppCompatActivity() {
                     } ?: run {
                         diseaseInfoTextView.text = "No information available."
                     }
-                    val historyItem = HistoryItem(result, plant, disease, url, imageBase64, info)
+                    val historyItem = HistoryItem(result, plant, disease, url, imageBase64, info, currentDate)
                     historyManager.saveHistoryItem(historyItem)
 
                 } else {
@@ -148,7 +153,8 @@ data class HistoryItem(
     val disease: String?,
     val url: String?,
     val imageBase64: String?,
-    val output: String?
+    val output: String?,
+    val date: String?
 )
 
 class HistoryManager(private val context: Context) {
@@ -171,7 +177,7 @@ class HistoryManager(private val context: Context) {
         return gson.fromJson(json, type)
     }
 
-    private fun saveHistory(history: List<HistoryItem>) {
+    fun saveHistory(history: List<HistoryItem>) {
         val file = File(context.filesDir, fileName)
         file.writeText(gson.toJson(history))
     }
