@@ -60,7 +60,7 @@
         android:id="@+id/girlplanting_image"
         android:layout_width="158dp"
         android:layout_height="190dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,20 +68,10 @@
         tools:srcCompat="@drawable/girl_planting_var1" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="267dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/girlplanting_image"
-        app:srcCompat="@drawable/letsidentify_text" />
-
-    <ImageView
         android:id="@+id/button_takephoto"
         android:layout_width="394dp"
         android:layout_height="56dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +90,16 @@
         app:layout_constraintTop_toBottomOf="@+id/button_takephoto"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/choosefile_button" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="267dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/girlplanting_image"
+        app:srcCompat="@drawable/letsidentify_text" />
 
     <TextView
         android:id="@+id/resultTextView"
@@ -143,5 +143,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectedImage"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/historyImageView"
+        android:layout_width="201dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:srcCompat="@drawable/history_button" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="323dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_choosefile"
+        app:srcCompat="@drawable/or_linebreak" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

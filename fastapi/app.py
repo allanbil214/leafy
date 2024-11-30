@@ -1,6 +1,7 @@
 # app.py
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
+from typing import Optional
 from model import plant_disease_model
 from pydantic import BaseModel
 from weather import WeatherService, LocationData
@@ -14,8 +15,8 @@ load_dotenv()
 app = FastAPI()
 
 # Initialize the model with the path to the TFLite model file
-model_path = "model_final"  # Replace with your model path
-model = plant_disease_model(model_path=model_path)
+model_path = "model-fix"  # Replace with your model path
+model = plant_disease_model(model_path=model_path, api_key=os.getenv("GEMINI_API_KEY"))
 weather_service = WeatherService(api_key=os.getenv("OPENWEATHER_API_KEY"))
 
 class ImageData(BaseModel):
@@ -48,16 +49,19 @@ async def predict_plant_disease(image_data: ImageData):
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/disease-info/{disease}")
-def get_disease_info(disease: str):
+async def get_disease_info(disease: str):
+
     try:
-        # Determine the response based on the predicted class
-        if "healthy" in disease:
-            info = plant_disease_model.prompt_healthy(disease)
-        elif "unknown" in disease:
-            info = plant_disease_model.prompt_healthy()
-        else:
-            info = plant_disease_model.prompt_disease(disease)
+        # Determine info type based on disease string
+        info_type = (
+            "healthy" if "healthy" in disease else
+            "unknown" if "unknown" in disease else
+            "disease"
+        )
+        
+        info = model.get_disease_info(disease, info_type)
         return JSONResponse(content={"disease_info": info})
+        
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

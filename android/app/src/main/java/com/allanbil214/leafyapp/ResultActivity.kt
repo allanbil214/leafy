@@ -17,6 +17,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.File
+
 class ResultActivity : AppCompatActivity() {
 
     private lateinit var selectedImage: ImageView
@@ -25,6 +30,15 @@ class ResultActivity : AppCompatActivity() {
     private lateinit var diseaseInfoLabel: TextView
     private lateinit var progressDialog: ProgressDialog
     private lateinit var textLinkClickable: TextView
+
+    // Declare variables for the data
+    private var result: String? = null
+    private var plant: String? = null
+    private var disease: String? = null
+    private var url: String? = null
+    private var imageBase64: String? = null
+
+    private val historyManager = HistoryManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +55,11 @@ class ResultActivity : AppCompatActivity() {
             setCancelable(false)
         }
 
-        val result = intent.getStringExtra("RESULT")
-        val plant = intent.getStringExtra("PLANT")
-        val disease = intent.getStringExtra("DISEASE")
-        val url = intent.getStringExtra("URL")
-        val imageBase64 = intent.getStringExtra("IMAGE")
+        result = intent.getStringExtra("RESULT")
+        plant = intent.getStringExtra("PLANT")
+        disease = intent.getStringExtra("DISEASE")
+        url = intent.getStringExtra("URL")
+        imageBase64 = intent.getStringExtra("IMAGE")
 
         resultTextView.text = plant
         diseaseInfoLabel.text = disease
@@ -111,6 +125,9 @@ class ResultActivity : AppCompatActivity() {
                     } ?: run {
                         diseaseInfoTextView.text = "No information available."
                     }
+                    val historyItem = HistoryItem(result, plant, disease, url, imageBase64, info)
+                    historyManager.saveHistoryItem(historyItem)
+
                 } else {
                     diseaseInfoTextView.text = "API Error: ${response.code()}"
                 }
@@ -122,5 +139,40 @@ class ResultActivity : AppCompatActivity() {
                 diseaseInfoTextView.text = "Network Error: ${t.message}"
             }
         })
+    }
+}
+
+data class HistoryItem(
+    val result: String?,
+    val plant: String?,
+    val disease: String?,
+    val url: String?,
+    val imageBase64: String?,
+    val output: String?
+)
+
+class HistoryManager(private val context: Context) {
+    private val fileName = "history.json"
+    private val gson = Gson()
+
+    fun saveHistoryItem(item: HistoryItem) {
+        val history = loadHistory().toMutableList()
+        history.add(item)
+        saveHistory(history)
+    }
+
+    fun loadHistory(): List<HistoryItem> {
+        val file = File(context.filesDir, fileName)
+        if (!file.exists()) {
+            return emptyList()
+        }
+        val json = file.readText()
+        val type = object : TypeToken<List<HistoryItem>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    private fun saveHistory(history: List<HistoryItem>) {
+        val file = File(context.filesDir, fileName)
+        file.writeText(gson.toJson(history))
     }
 }

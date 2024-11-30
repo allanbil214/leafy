@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.widget.ImageView
 import android.app.ProgressDialog // Import this for the loading dialog
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,9 +29,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min
 import androidx.appcompat.app.AppCompatDelegate
-import android.widget.TextView
-import android.widget.Toast
-import com.google.android.material.card.MaterialCardView
 
 class ControlledRandomizer(private val items: List<Int>) {
     private var lastIndex = -1
@@ -61,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var selectedImage: ImageView
     private lateinit var button_choosefile: ImageView
     private lateinit var button_takephoto: ImageView
+    private lateinit var historyButton: ImageView
     private var imageBase64: String? = null
     private lateinit var currentPhotoPath: String
     private lateinit var progressDialog: ProgressDialog
@@ -85,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         button_choosefile = findViewById(R.id.button_choosefile)
         button_takephoto = findViewById(R.id.button_takephoto)
         girlplanting_image = findViewById(R.id.girlplanting_image)
+        historyButton = findViewById(R.id.historyImageView)
 
         // Progress Bar
         progressDialog = ProgressDialog(this)
@@ -113,6 +113,13 @@ class MainActivity : AppCompatActivity() {
                 requestCameraPermission()
             }
         }
+
+        historyButton.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
     // Helper function to set a random image

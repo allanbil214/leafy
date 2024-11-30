@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Leafy</string>
+    <string name="press_to_learn_more"><a href="%1$s">press to learn more.</a></string>
+
+</resources>

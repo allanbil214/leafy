@@ -8,6 +8,8 @@ import os
 from io import BytesIO
 from PIL import Image
 import time
+from typing import Literal
+from functools import lru_cache
 
 from dotenv import load_dotenv
 
@@ -15,9 +17,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class plant_disease_model:
-    def __init__(self, model_path, confidence_threshold=0.5):
+    def __init__(self, model_path, api_key: str, confidence_threshold=0.90):
         self.loaded_model = tf.saved_model.load(model_path)
         self.confidence_threshold = confidence_threshold
+        self.api_key = api_key
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel('gemini-pro')
 
 
     def predict_tf(self, base64_str, save_dir='saved_images'):
@@ -75,74 +80,53 @@ class plant_disease_model:
             "confidence": float(max_confidence)
         }
 
-    def prompt_unknown(disease):
-        genai.configure(api_key="GEMINI_API_KEY")
-        model = genai.GenerativeModel('gemini-pro')
+    @lru_cache(maxsize=100)  # Cache responses for identical queries
+    def get_disease_info(self, disease: str, info_type: Literal["healthy", "unknown", "disease"]) -> str:
+        prompts = {
+            "healthy": """Your {plant_type} plant is healthy! Here's a 3-paragraph guide for routine care to keep it healthy and thriving.
+            Opening with a statement about the plant's health. In Markdown format.
+            
+            With formatting example as follows:
+            
+            # **The {plant_type} [standard name] also known as (scientific name) blablablablabla!**
+            Opening paragraph Blablablablablabla. Here are some tips to keep in mind:
+            1. **blablablabla**
+            - blablablablabla.
+            - etc.
+            2. **etc..**
+            
+            - etc
+            ---
+            closing paragraph""",
+            
+            "unknown": "create a sentence stating that the photo is not of a plant leaf.",
+            
+            "disease": """
+            ###
+            Explain Disease {disease}: Definition, Causes, and Brief Treatment in 3 paragraphs.
+            Open by mentioning the disease in its standard form and its scientific form. In Markdown format. Use Lists for the Treatment section.
+            Example format:
+            # Disease {disease}: Definition, Causes, and Treatment
+            ---
+            {disease} (scientific name: scientific_name) is a medical condition characterized by disturbances in body function or structure, which can lead to specific symptoms. This disease can affect various systems in the human body and can vary in severity. Typically, {disease} affects organ_system, causing main_symptom.
+            
+            The causes of {disease} can be diverse, including genetic factors, infections, or environmental factors. Bacterial or viral infections are often the main cause, but lifestyle factors such as poor diet, lack of physical activity, or exposure to harmful chemicals can also trigger this disease. Some cases may also be caused by genetic abnormalities that interfere with the body's mechanism in maintaining functional balance.
+            
+            ### Treatment
+            Treatment of {disease} can be done in various ways, including:
+            - **Medical treatment**: Using appropriate medications to address symptoms or causes of the disease.
+            - **Lifestyle changes**: Maintaining a healthy diet, regular exercise, and avoiding risk factors.
+            - **Surgical intervention**: In more severe cases, surgical procedures may be necessary to address damage or disruption.
+            - **Prevention**: Vaccination and education about avoiding risk factors are important steps to prevent the spread of this disease.
+            """
+        }
         
-        prompt = f"buat kalimat bahwa foto itu bukan daun tanaman."
-        
-        response = model.generate_content(prompt)
-        return response.text
-
-    def prompt_disease(disease):
-        genai.configure(api_key="GEMINI_API_KEY")
-        model = genai.GenerativeModel('gemini-pro')
-        
-        prompt = f"""
-        ### 
-        Jelaskan Penyakit {disease}: Pengertian, Penyebab, dan Cara Penanganan singkat dalam 3 paragraf. 
-        Buka dengan menyebutkan jenis penyakit dalam bentuk baku dan dalam bentuk scientificnya. dalam format Markdown ya. Bagian Penanganan pakai List ya.
-
-
-        Contoh format:
-        # Penyakit {disease}: Pengertian, Penyebab, dan Cara Penanganan
-
-        ---
-
-        Penyakit {disease} (dalam bahasa ilmiah: scientific_name) adalah suatu kondisi medis yang ditandai dengan gangguan pada fungsi atau struktur tubuh, yang dapat mengarah pada gejala tertentu. Penyakit ini dapat mempengaruhi berbagai sistem dalam tubuh manusia dan dapat bervariasi dalam tingkat keparahan. Biasanya, {disease} mempengaruhi organ_system, menyebabkan main_symptom.
-
-        Penyebab dari penyakit {disease} dapat beragam, termasuk faktor genetik, infeksi, atau faktor lingkungan. Infeksi bakteri atau virus sering kali menjadi penyebab utama, namun faktor gaya hidup seperti pola makan yang buruk, kurangnya aktivitas fisik, atau paparan terhadap bahan kimia berbahaya juga dapat memicu timbulnya penyakit ini. Beberapa kasus mungkin juga disebabkan oleh kelainan genetik yang mengganggu mekanisme tubuh dalam menjaga keseimbangan fungsional.
-
-        ### Cara Penanganan
-
-        Penanganan penyakit {disease} dapat dilakukan dengan berbagai cara, antara lain:
-
-        - **Pengobatan medis**: Menggunakan obat-obatan yang sesuai untuk mengatasi gejala atau penyebab penyakit.
-        - **Perubahan gaya hidup**: Menjaga pola makan sehat, berolahraga secara rutin, dan menghindari faktor risiko.
-        - **Tindakan bedah**: Pada beberapa kasus yang lebih parah, prosedur bedah mungkin diperlukan untuk mengatasi kerusakan atau gangguan yang terjadi.
-        - **Pencegahan**: Vaksinasi dan edukasi tentang cara menghindari faktor risiko adalah langkah penting untuk mencegah penyebaran penyakit ini.
-        """
-        
-        response = model.generate_content(prompt)
-        return response.text
-
-    def prompt_healthy(plant_type):
-        genai.configure(api_key="GEMINI_API_KEY")
-        model = genai.GenerativeModel('gemini-pro')
-        prompt = f"""Tanaman {plant_type} Anda sehat! Berikan saran perawatan rutin agar tetap sehat dan subur dalam 3 paragraf. 
-        Buka dengan menyatakan bahwa jenis_tanamannya sehat. dalam format Markdown ya.
-        
-        Dengan contoh formatting seperti berikut:
-        
-        # **Tanaman {plant_type} [rubah namanya dalam bahasa baku] atau dikenal sebagai (nama saintifik)  blablablablabla!** 
-
-        paragraf pembuka Blablablablablabla. Berikut adalah beberapa tips yang perlu diperhatikan:
-
-        1. **blablablabla** 
-
-        - blablablablabla. 
-        - dst.
-
-        2. **dst..**
-        
-        - dst
-
-        ---
-
-        paragraf penutup"""
-        
-        response = model.generate_content(prompt)
-        return response.text
+        try:
+            prompt = prompts[info_type].format(disease=disease)
+            response = self.model.generate_content(prompt)
+            return response.text
+        except Exception as e:
+            raise Exception(f"Error generating response: {str(e)}")
     
     def split_class_name(self, class_name):
         # Split the string by '___'
