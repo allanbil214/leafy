@@ -1,0 +1,14 @@
+
+*.lnk
+fastapi/.model-fix/fingerprint.pb
+fastapi/.model-fix/saved_model.pb
+fastapi/.model-fix/variables/variables.data-00000-of-00001
+fastapi/.model-fix/variables/variables.index
+fastapi/__pycache__/model.cpython-310.pyc
+fastapi/__pycache__/model.cpython-310.pyc
+fastapi/saved_images/Apple___Cedar_apple_rust_1732954908.jpg
+fastapi/saved_images/Cherry___Powdery_mildew_1732955310.jpg
+fastapi/__pycache__/model.cpython-310.pyc
+fastapi/saved_images/Peach___Bacterial_spot_1732955272.jpg
+fastapi/saved_images/Tomato___Early_blight_1732954862.jpg
+fastapi/saved_images/Tomato___Early_blight_1732954924.jpg
