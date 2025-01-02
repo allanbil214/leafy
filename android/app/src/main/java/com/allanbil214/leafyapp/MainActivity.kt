@@ -12,6 +12,7 @@ import android.util.Base64
 import android.widget.ImageView
 import android.app.ProgressDialog // Import this for the loading dialog
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min
 import androidx.appcompat.app.AppCompatDelegate
+import com.yalantis.ucrop.UCrop
 
 class ControlledRandomizer(private val items: List<Int>) {
     private var lastIndex = -1
@@ -128,6 +130,27 @@ class MainActivity : AppCompatActivity() {
         girlplanting_image.setImageResource(nextImage)
     }
 
+    private fun startCrop(sourceUri: Uri) {
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
+
+        val uCrop = UCrop.of(sourceUri, destinationUri)
+            .withAspectRatio(1f, 1f)  // You can adjust this ratio as needed
+            .withMaxResultSize(640, 420)  // Match your existing resize dimensions
+
+        // Customize the cropping window
+        val options = UCrop.Options().apply {
+            setCircleDimmedLayer(false)  // Set to true for circular crop
+            setShowCropFrame(true)
+            setShowCropGrid(true)
+            setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+            setStatusBarColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+            setToolbarTitle("Crop Leaf Image")
+            setFreeStyleCropEnabled(true)  // Allow free-form cropping
+        }
+
+        uCrop.withOptions(options)
+        uCrop.start(this)
+    }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -202,15 +225,30 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_IMAGE_PICK -> {
                     val imageUri: Uri? = data?.data
                     imageUri?.let {
+                        startCrop(it)
+                    }
+                }
+                REQUEST_IMAGE_CAPTURE -> {
+                    val photoFile = File(currentPhotoPath)
+                    val photoUri = FileProvider.getUriForFile(
+                        this,
+                        "com.allanbil214.leafyapp.fileprovider",
+                        photoFile
+                    )
+                    startCrop(photoUri)
+                }
+                UCrop.REQUEST_CROP -> {
+                    val resultUri = UCrop.getOutput(data!!)
+                    resultUri?.let {
                         val inputStream = contentResolver.openInputStream(it)
                         val selectedBitmap = BitmapFactory.decodeStream(inputStream)
                         processImage(selectedBitmap)
                     }
                 }
-                REQUEST_IMAGE_CAPTURE -> {
-                    val file = File(currentPhotoPath)
-                    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    processImage(bitmap)
+                UCrop.RESULT_ERROR -> {
+                    val cropError = UCrop.getError(data!!)
+                    // Handle the error, maybe show a Toast
+                    Toast.makeText(this, "Error cropping image: ${cropError?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

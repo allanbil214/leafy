@@ -15,6 +15,8 @@ class HistoryAdapter(
     private val onDeleteClicked: (HistoryItem, Int) -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
+    private var isDeletionInProgress = false
+
     class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val plantTextView: TextView = itemView.findViewById(R.id.plantTextView)
         val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
@@ -44,26 +46,25 @@ class HistoryAdapter(
         holder.diseaseTextView.text = historyItem.disease ?: "Unknown Disease"
         holder.dateTextView.text = historyItem.date ?: "Unknown Date"
 
+        // Always ensure delete button is enabled during binding
+        holder.deleteButton.isEnabled = true
+
         val markdownText = historyItem.output ?: "No Information"
 
-        // Set initial text based on expansion state
         if (holder.isExpanded) {
             markwon?.setMarkdown(holder.diseaseInfoTextView, markdownText)
         } else {
             holder.diseaseInfoTextView.text = "Tap to read disease information..."
         }
 
-        // Set initial expansion state
         holder.diseaseInfoTextView.maxLines = if (holder.isExpanded) Int.MAX_VALUE else 1
 
-        // Display the image
         if (!historyItem.imageBase64.isNullOrEmpty()) {
             val imageBytes = Base64.decode(historyItem.imageBase64, Base64.DEFAULT)
             val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             holder.imageView.setImageBitmap(bitmap)
         }
 
-        // Set up click listeners for expansion
         val clickableViews = listOf(
             holder.plantTextView,
             holder.diseaseTextView,
@@ -77,11 +78,12 @@ class HistoryAdapter(
             }
         }
 
-        // Handle delete button click with position
         holder.deleteButton.setOnClickListener {
             val adapterPosition = holder.adapterPosition
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                onDeleteClicked(historyItem, adapterPosition)
+            if (adapterPosition != RecyclerView.NO_POSITION && !isDeletionInProgress) {
+                isDeletionInProgress = true
+                holder.deleteButton.isEnabled = false
+                onDeleteClicked(historyList[adapterPosition], adapterPosition)
             }
         }
     }
@@ -104,6 +106,13 @@ class HistoryAdapter(
             historyList.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, historyList.size)
+            isDeletionInProgress = false
         }
+    }
+
+    // Add new method to reset deletion state
+    fun resetDeletionState(position: Int) {
+        isDeletionInProgress = false
+        notifyItemChanged(position)
     }
 }

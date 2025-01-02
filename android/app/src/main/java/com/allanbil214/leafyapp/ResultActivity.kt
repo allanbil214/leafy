@@ -43,6 +43,7 @@ class ResultActivity : AppCompatActivity() {
     private var disease: String? = null
     private var url: String? = null
     private var imageBase64: String? = null
+    private val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
     private val historyManager = HistoryManager(this)
 
@@ -163,7 +164,6 @@ class ResultActivity : AppCompatActivity() {
 
             val apiService = retrofit.create(ApiService::class.java)
             val call = apiService.getDiseaseInfo(disease)
-            val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
             call.enqueue(object : Callback<DiseaseInfo> {
                 override fun onResponse(call: Call<DiseaseInfo>, response: Response<DiseaseInfo>) {
@@ -177,19 +177,12 @@ class ResultActivity : AppCompatActivity() {
                             val markwon = Markwon.create(this@ResultActivity)
                             markwon.setMarkdown(diseaseInfoTextView, info)
 
-                            val historyItem = HistoryItem(
-                                result,
-                                plant,
-                                disease,
-                                url,
-                                imageBase64,
-                                info,
-                                currentDate
-                            )
-                            historyManager.saveHistoryItem(historyItem)
-
+                            // Save to history for successful cases
+                            saveToHistory(info, currentDate)
                         } else {
-                            throw Exception("API Error: ${response.code()} - ${response.message()}")
+                            val errorInfo = "API Error: ${response.code()} - ${response.message()}"
+                            askToSaveError(errorInfo, currentDate)
+                            throw Exception(errorInfo)
                         }
                     } catch (e: Exception) {
                         handleDiseaseInfoError(e)
@@ -198,26 +191,53 @@ class ResultActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<DiseaseInfo>, t: Throwable) {
                     progressDialog.dismiss()
+                    val errorInfo = "Network Error: ${t.message}"
+                    askToSaveError(errorInfo, currentDate)
                     handleDiseaseInfoError(t)
                 }
             })
         } catch (e: Exception) {
             progressDialog.dismiss()
+            val errorInfo = "Error: ${e.message}"
+            askToSaveError(errorInfo, currentDate)
             handleDiseaseInfoError(e)
         }
+    }
+
+    private fun askToSaveError(errorInfo: String, date: String) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Save to History?")
+            .setMessage("An error occurred. Would you like to save this result to history anyway?")
+            .setPositiveButton("Yes") { _, _ ->
+                saveToHistory(errorInfo, date)
+                Toast.makeText(this, "Saved to history", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+                Toast.makeText(this, "Not saved to history", Toast.LENGTH_SHORT).show()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun saveToHistory(info: String, date: String) {
+        val historyItem = HistoryItem(
+            result,
+            plant,
+            disease,
+            url,
+            imageBase64,
+            info,
+            date
+        )
+        historyManager.saveHistoryItem(historyItem)
     }
 
     private fun handleDiseaseInfoError(e: Throwable) {
         e.printStackTrace()
         val errorMessage = "Error fetching disease information: ${e.localizedMessage}"
-
         diseaseInfoTextView.text = errorMessage
-
-        Toast.makeText(
-            this,
-            errorMessage,
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
     }
 }
 

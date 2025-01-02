@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from typing import Optional
 from model import plant_disease_model
 from pydantic import BaseModel
-from weather import WeatherService, LocationData
 import os
 
 from dotenv import load_dotenv
@@ -15,9 +14,9 @@ load_dotenv()
 app = FastAPI()
 
 # Initialize the model with the path to the TFLite model file
-model_path = ".model-fix"  # Replace with your model path
+# model_path = ".model-lcnn"  # Replace with your model path
+model_path = ".model_inceptionv3"
 model = plant_disease_model(model_path=model_path, api_key=os.getenv("GEMINI_API_KEY"))
-weather_service = WeatherService(api_key=os.getenv("OPENWEATHER_API_KEY"))
 
 class ImageData(BaseModel):
     base64_encoded: str
@@ -32,9 +31,8 @@ async def predict_plant_disease(image_data: ImageData):
         # Make a prediction using the base64 encoded image data
         base64_encoded = image_data.base64_encoded
         prediction_result = model.predict_tf(base64_encoded)
-        plant, disease, url = model.split_class_name(prediction_result["class_name"])
-        
         print(prediction_result)
+        plant, disease, url = model.split_class_name(prediction_result["class_name"])
 
         # Return results
         return JSONResponse(content={
@@ -50,42 +48,18 @@ async def predict_plant_disease(image_data: ImageData):
 
 @app.get("/disease-info/{disease}")
 async def get_disease_info(disease: str):
-
+    print(disease)
     try:
         # Determine info type based on disease string
         info_type = (
             "healthy" if "healthy" in disease else
-            "unknown" if "unknown" in disease else
+            "unknown" if "Unknown Plant___Unknown_Disease" in disease else
             "disease"
         )
         
         info = model.get_disease_info(disease, info_type)
         return JSONResponse(content={"disease_info": info})
         
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/weather/current")
-async def get_current_weather(location: LocationData):
-    """Get current weather for the given location."""
-    try:
-        weather_data = weather_service.get_current_weather(
-            lat=location.latitude,
-            lon=location.longitude
-        )
-        return weather_service.parse_weather_data(weather_data)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/weather/forecast")
-async def get_weather_forecast(location: LocationData):
-    """Get 5-day weather forecast for the given location."""
-    try:
-        forecast_data = weather_service.get_weather_forecast(
-            lat=location.latitude,
-            lon=location.longitude
-        )
-        return JSONResponse(content=forecast_data)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

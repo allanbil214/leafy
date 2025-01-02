@@ -36,6 +36,10 @@
         </activity>
         <activity android:name=".ResultActivity" />
         <activity android:name=".HistoryActivity" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

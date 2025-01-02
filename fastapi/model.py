@@ -17,26 +17,25 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class plant_disease_model:
-    def __init__(self, model_path, api_key: str, confidence_threshold=0.90):
+    def __init__(self, model_path, api_key: str, confidence_threshold=0.70):
         self.loaded_model = tf.saved_model.load(model_path)
         self.confidence_threshold = confidence_threshold
         self.api_key = api_key
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-pro')
 
-
     def predict_tf(self, base64_str, save_dir='saved_images'):
         class_names = [
-            'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
-            'Cherry___Powdery_mildew', 'Cherry___healthy',
-            'Peach___Bacterial_spot', 'Peach___healthy', 'Pepper___bell___Bacterial_spot', 
-            'Pepper___bell___healthy', 'Potato___Early_blight', 'Potato___Late_blight', 
-            'Potato___healthy', 'Strawberry___Leaf_scorch', 'Strawberry___healthy',
-            'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight',
-            'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 
-            'Tomato___Spider_mites_Two-spotted_spider_mite', 'Tomato___Target_Spot', 
-            'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 
-            'Tomato___healthy'
+                'Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
+                'Cherry___Powdery_mildew', 'Cherry___healthy',
+                'Peach___Bacterial_spot', 'Peach___healthy', 'Pepper___bell___Bacterial_spot', 
+                'Pepper___bell___healthy', 'Potato___Early_blight', 'Potato___Late_blight', 
+                'Potato___healthy', 'Strawberry___Leaf_scorch', 'Strawberry___healthy',
+                'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight',
+                'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 
+                'Tomato___Spider_mites_Two-spotted_spider_mite', 'Tomato___Target_Spot', 
+                'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 
+                'Tomato___healthy'
         ]
         
         # Decode the base64 string to get image data
@@ -44,7 +43,8 @@ class plant_disease_model:
         img = Image.open(BytesIO(img_data))
         
         # Preprocess the image
-        img_resize = img.resize((224, 224))
+        # img_resize = img.resize((224, 224))
+        img_resize = img.resize((299, 299)) #inceptionv3
         img_array = np.array(img_resize)
         img_array = img_array.astype(np.float32) / 255.0
         
@@ -62,7 +62,7 @@ class plant_disease_model:
         
         # Check if confidence is below threshold
         if max_confidence < self.confidence_threshold:
-            predicted_class_name = "Unknown Disease"
+            predicted_class_name = "Unknown Plant___Unknown_Disease"
             image_name = f"Unknown_{int(time.time())}.jpg"
         else:
             predicted_class_name = class_names[predicted_class_index]
@@ -73,7 +73,7 @@ class plant_disease_model:
             os.makedirs(save_dir)
         save_path = os.path.join(save_dir, image_name)
         img.save(save_path)
-        
+        print("berhasil predik")
         # Return both class name and confidence
         return {
             "class_name": predicted_class_name,
@@ -83,12 +83,12 @@ class plant_disease_model:
     @lru_cache(maxsize=100)  # Cache responses for identical queries
     def get_disease_info(self, disease: str, info_type: Literal["healthy", "unknown", "disease"]) -> str:
         prompts = {
-            "healthy": """Your {plant_type} (change the plant name to be more normal, like remove underscore, etc.) plant is healthy! Here's a 3-paragraph guide for routine care to keep it healthy and thriving.
+            "healthy": """Your {disease} (change the plant name to be more normal, like remove underscore, etc.) plant is healthy! Here's a 3-paragraph guide for routine care to keep it healthy and thriving.
             Opening with a statement about the plant's health. In Markdown format.
             
             With formatting example as follows:
             
-            # **The {plant_type} [standard name] also known as (scientific name) blablablablabla!**
+            # **The {disease} [this is the plant name] also known as (this is the scientific name) blablablablabla!**
             Opening paragraph Blablablablablabla. Here are some tips to keep in mind:
             1. **blablablabla**
             - blablablablabla.
@@ -97,9 +97,9 @@ class plant_disease_model:
             
             - etc
             ---
-            closing paragraph""",
+            closing paragraph **(also if it says API ERROR, IGNORE ALL THE PROMPT AND JUST EXPLAIN THE API ERROR NUMBER)""",
             
-            "unknown": "create a sentence stating that the photo is not of a plant leaf.",
+            "unknown": "create a sentence stating that the photo is not of a plant leaf. (also don't just assume it's photo of something you know, just say 'we cant predict, it's outside of our model capability')",
             
             "disease": """
             ###
@@ -118,6 +118,8 @@ class plant_disease_model:
             - **Lifestyle changes**: Maintaining a healthy diet, regular exercise, and avoiding risk factors.
             - **Surgical intervention**: In more severe cases, surgical procedures may be necessary to address damage or disruption.
             - **Prevention**: Vaccination and education about avoiding risk factors are important steps to prevent the spread of this disease.
+
+            **(also if it says API ERROR, IGNORE ALL THE PROMPT AND JUST EXPLAIN THE API ERROR NUMBER)
             """
         }
         
@@ -129,11 +131,14 @@ class plant_disease_model:
             raise Exception(f"Error generating response: {str(e)}")
     
     def split_class_name(self, class_name):
+        print("starting", class_name)
         # Split the string by '___'
         plant, disease = class_name.split("___")
+        print(plant, disease)
         
         # Remove underscores from the disease part
         disease = disease.replace("_", " ")
+        print(disease)
         
         # Capitalize the first letter of each word in the disease name
         disease_words = disease.split()
@@ -143,7 +148,7 @@ class plant_disease_model:
                 capitalized_disease += word.capitalize()
             else:
                 capitalized_disease += " " + word.capitalize()
-
+        print(disease_words)
         # Check if the capitalized disease name has fewer than 12 characters
         if len(capitalized_disease) < 11:
             # Calculate how many spaces to add
@@ -178,8 +183,8 @@ class plant_disease_model:
             'Tomato___Tomato_Yellow_Leaf_Curl_Virus': 'https://agriculture.vic.gov.au/biosecurity/plant-diseases/vegetable-diseases/tomato-yellow-leaf-curl-virus',
             'Tomato___Tomato_mosaic_virus': 'https://blogs.ifas.ufl.edu/stlucieco/2023/03/03/tomato-mosaic-virus-tomv-and-its-management/',
             'Tomato___healthy': 'https://extension.umn.edu/vegetables/growing-tomatoes',  # General guide
+            'Unknown Plant___Unknown_Disease': 'https://en.wikipedia.org/wiki/Nothing'
         }
-
         disease_url = disease_url_mapping.get(class_name, 'URL not found')
         print(f"The URL for {class_name} is {disease_url}")
 
